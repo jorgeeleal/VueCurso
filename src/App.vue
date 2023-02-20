@@ -1,47 +1,76 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+// --  ref: Reactividad - DOM 
+import {ref, computed} from 'vue';
+
+const name = 'Vue Curso';
+
+const counter = ref(0);
+const listaFavoritos = ref([]);
+
+const classArray = computed(() => {
+  const existente = listaFavoritos.value.find(num => num === counter.value);
+  return existente || existente === 0;
+})
+
+const classCounter = computed(() => {
+  if(counter.value === 0) return 'cero';
+  if(counter.value < 0) return 'negative';
+  if(counter.value > 0) return 'positive';
+  return 
+})
+
+const increment = () => counter.value++;
+const decrement = () => counter.value--;
+const reset = () => counter.value = 0;
+const anadir = (num) => {
+  listaFavoritos.value.push(num);
+}
+
 </script>
 
+
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <h1>{{name.toUpperCase()}}</h1>
+  <br>
+  <h2>Práctica 1</h2>
+  <br>
+  <p style="margin-bottom: 10px;">Contador : </p>
+  <p :class="classCounter">{{ counter }}</p>  
+  <button @click="increment">Incrementar</button>
+  <br>
+  <button @click="decrement">Decrementar</button>
+  <br>
+  <button @click="reset">Recetear</button>
+  <br>
+  <button @click="anadir(counter)" :disabled="classArray">Añadir a favoritos</button>
+  <br>
+  <ul>
+    <li
+    v-for="(num, index) in listaFavoritos"
+    :key="index"
+    >
+    {{ num }}
+    </li>
+  </ul>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
+<style>
+button {
+  padding: 10px;
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+h1 {
+  color: gray;
 }
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.positive{
+  color: green;
+}
+.negative{
+  color: red;
+}
+.cero{
+  color: black;
 }
 </style>
+
+<!-- v-bind: = : -->
+<!-- v-on:   = @ -->
