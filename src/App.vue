@@ -36,16 +36,16 @@ const anadir = (num) => {
   <br>
   <p style="margin-bottom: 10px;">Contador : </p>
   <p :class="classCounter">{{ counter }}</p>  
-  <button @click="increment">Incrementar</button>
+  <div class="btn-group">
+    <button @click="increment" class="btn btn-success">Incrementar</button>
+    <button @click="decrement" class="btn btn-danger">Decrementar</button>
+    <button @click="reset" class="btn btn-secondary">Recetear</button>
+    <button @click="anadir(counter)" :disabled="classArray" class="btn btn-primary">Añadir a favoritos</button>
+  </div>
   <br>
-  <button @click="decrement">Decrementar</button>
-  <br>
-  <button @click="reset">Recetear</button>
-  <br>
-  <button @click="anadir(counter)" :disabled="classArray">Añadir a favoritos</button>
-  <br>
-  <ul>
+  <ul class="list-group mt-2">
     <li
+    class="list-group-item"
     v-for="(num, index) in listaFavoritos"
     :key="index"
     >
