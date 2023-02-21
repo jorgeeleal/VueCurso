@@ -3,6 +3,7 @@
 // --  ref: Reactividad - DOM 
 // -- computed: calcular y mostrar valores en función de un valor
 import {ref, computed} from 'vue';
+import BlogPost from './components/BlogPost.vue';
 
 //--------------------------------------------
 const name = 'Vue Curso';
@@ -29,6 +30,38 @@ const anadir = (num) => {
   listaFavoritos.value.push(num);
 }
 
+//------------------------------------------
+const posts = ref([
+  {
+    id: 1,
+    title: "Primer post",
+    body: "Trabajando con componentes",
+    colorText: "primary"
+  },
+  {
+    id: 2,
+    title: "Segundo post",
+    body: "Utilizando v-for",
+    colorText: "primary"
+  },
+  {
+    id: 3,
+    title: "Tercer post",
+    body: "Este es el tercer elemento",
+    colorText: "primary"
+  },
+  {
+    id: 4,
+    title: "Cuarto post",
+    body: "Cuarto elemento",
+    colorText: "secundary"
+  }
+])
+
+const postFavorito = ref('');
+const cambiarFavorito = (post) => {
+  postFavorito.value = post;
+}
 </script>
 
 <template>
@@ -54,6 +87,25 @@ const anadir = (num) => {
     {{ num }}
     </li>
   </ul>
+  <br>
+  <p class="fw-lighter">• (reactividad, eventos, v-if, v-for, computed)</p>
+  <br>
+  <h2>Práctica 2</h2>
+  <br>
+  <p>Mi post favorito : {{ postFavorito }}</p> 
+  <br>
+  <BlogPost
+  v-for="post in posts"
+  :key="post.id" 
+  :id="post.id"
+  :title="post.title"
+  :body="post.body"
+  :colorText="post.colorText"
+  @cambiarFavorito="cambiarFavorito"
+  />
+  <p class="fw-lighter">• (componentes, emit, props)</p>
+  <hr>
+  <hr>
 </template>
 
 <style>
