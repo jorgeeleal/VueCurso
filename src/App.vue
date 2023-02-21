@@ -1,14 +1,17 @@
 <script setup>
+
 // --  ref: Reactividad - DOM 
+// -- computed: calcular y mostrar valores en función de un valor
 import {ref, computed} from 'vue';
 
+//--------------------------------------------
 const name = 'Vue Curso';
 
 const counter = ref(0);
 const listaFavoritos = ref([]);
 
 const classArray = computed(() => {
-  const existente = listaFavoritos.value.find(num => num === counter.value);
+  const existente = listaFavoritos.value.find(num => num === counter.value); //-- retorna el primer valor que cumple || undefined
   return existente || existente === 0;
 })
 
@@ -28,9 +31,8 @@ const anadir = (num) => {
 
 </script>
 
-
 <template>
-  <h1>{{name.toUpperCase()}}</h1>
+  <h1>{{name.toUpperCase()}}</h1> <!-- {{ JS }}-->
   <br>
   <h2>Práctica 1</h2>
   <br>
