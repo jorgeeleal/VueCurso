@@ -24,7 +24,7 @@ defineProps(['id', 'title', 'body', 'colorText']);
 </script>
 
 <template>
-    <div class="card mt-1">
+    <div class="card my-1 mx-1">
         <div class="card-body">
             <h5 class="card-title">{{id}} - {{title}}</h5>
             <p :class="`text-${colorText}`">{{body}}</p>

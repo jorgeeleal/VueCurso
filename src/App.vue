@@ -2,10 +2,13 @@
 
 // --  ref: Reactividad - DOM 
 // -- computed: calcular y mostrar valores en función de un valor
-import {ref, computed} from 'vue';
+// -- onMounted: Se ejecuta después de montar el <template>
+import {ref, computed, onMounted} from 'vue';
 import BlogPost from './components/BlogPost.vue';
+import PaginatePost from './components/PaginatePost.vue'
+import LoadingSpinner from './components/LoadingSpinner.vue'
 
-//--------------------------------------------
+//-------------------------------------------- Practica 1
 const name = 'Vue Curso';
 
 const counter = ref(0);
@@ -30,7 +33,7 @@ const anadir = (num) => {
   listaFavoritos.value.push(num);
 }
 
-//------------------------------------------
+//-------------------------------------------- Practica 2
 const posts = ref([
   {
     id: 1,
@@ -62,15 +65,67 @@ const postFavorito = ref('');
 const cambiarFavorito = (post) => {
   postFavorito.value = post;
 }
+//-------------------------------------------- Practica 3
+
+const apiposts = ref([]);
+
+const loading = ref(true);
+
+/*
+  //-- onMounted -- Elemento existente en el DOM
+
+  onMounted(async() => {
+    try {
+      const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+      apiposts.value = await response.json();
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {                      // -- Solo para visualizar el spinner
+        loading.value = false;
+      }, 1500);
+    }
+  })  
+*/
+
+const fetchData = async () => {
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+    apiposts.value = await response.json();
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setTimeout(() => {                  
+      loading.value = false;
+    }, 1500);
+  }
+};
+
+fetchData();
+
+const postxpage = 4;
+const inicio = ref(0);
+const fin = ref(postxpage);
+
+const siguientes = () => {
+  inicio.value += postxpage;
+  fin.value += postxpage;
+}
+const previos = () => {
+  inicio.value -= postxpage;
+  fin.value -= postxpage;
+}
+
 </script>
 
 <template>
-  <h1>{{name.toUpperCase()}}</h1> <!-- {{ JS }}-->
+  <h1 class="mt-3">{{name.toUpperCase()}}</h1> <!-- {{ JS }}-->
   <br>
   <h2>Práctica 1</h2>
   <br>
-  <p style="margin-bottom: 10px;">Contador : </p>
-  <p :class="classCounter">{{ counter }}</p>  
+  <p style="margin-bottom: 10px;">Contador : <span :class="classCounter">{{ counter }}</span></p>
+  <br>
   <div class="btn-group">
     <button @click="increment" class="btn btn-success">Incrementar</button>
     <button @click="decrement" class="btn btn-danger">Decrementar</button>
@@ -78,15 +133,17 @@ const cambiarFavorito = (post) => {
     <button @click="anadir(counter)" :disabled="classArray" class="btn btn-primary">Añadir a favoritos</button>
   </div>
   <br>
-  <ul class="list-group mt-2">
-    <li
-    class="list-group-item"
-    v-for="(num, index) in listaFavoritos"
-    :key="index"
-    >
-    {{ num }}
-    </li>
-  </ul>
+  <div class="container text-start ">
+    <ul class="list-group mt-2">
+      <li
+      class="list-group-item"
+      v-for="(num, index) in listaFavoritos"
+      :key="index"
+      >
+      {{ num }}
+      </li>
+    </ul>
+  </div>
   <br>
   <p class="fw-lighter">• (reactividad, eventos, v-if, v-for, computed)</p>
   <br>
@@ -104,8 +161,33 @@ const cambiarFavorito = (post) => {
   @cambiarFavorito="cambiarFavorito"
   />
   <p class="fw-lighter">• (componentes, emit, props)</p>
+  <br>
   <hr>
   <hr>
+  <h2>Práctica 3</h2>
+  <br>
+  <div class="container text-center">
+    <PaginatePost 
+    @siguientes="siguientes"
+    @previos="previos"
+    :inicio="inicio"
+    :fin="fin" 
+    :apilenght="apiposts.length"
+    />
+  </div>
+  <br>
+  <LoadingSpinner v-if="loading"/>
+  <BlogPost
+  v-for="post in apiposts.slice(inicio, fin)"
+  :key="post.id" 
+  :id="post.id"
+  :title="post.title"
+  :body="post.body"
+  :colorText="post.colorText"
+  @cambiarFavorito="cambiarFavorito"
+  v-else
+  />
+  <p class="fw-lighter">• (consumir API *fetch, onMounted)</p>
 </template>
 
 <style>
